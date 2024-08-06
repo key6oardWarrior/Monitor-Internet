@@ -26,6 +26,7 @@ def get_arguments(start: int) -> set[str]:
 
 if __name__ == "__main__":
 	interface: str = None
+	file_location: str = None
 	country: set[str] = set()
 	src_ip: set[str] = set()
 	dst_ip: set[str] = set()
@@ -36,6 +37,9 @@ if __name__ == "__main__":
 
 	if "-i" in argv:
 		interface: str = argv[argv.index("-i")+1]
+
+	if "-f" in argv:
+		file_location: str = argv[argv.index("-f")+1]
 	
 	if "-c" in argv:
 		country: set[str] = get_arguments(argv.index("-c"))
@@ -58,6 +62,6 @@ if __name__ == "__main__":
 	if "-a" in argv:
 		app_proto: set[str] = get_arguments(argv.index("-a"))
 
-	monitor = Monitor(interface, country, src_ip, dst_ip, src_port, dst_port, transport_proto, app_proto)
+	monitor = Monitor(interface, country, src_ip, dst_ip, src_port, dst_port, transport_proto, app_proto, file_location)
 	monitor.capture_packets()
 	monitor.parse_data()
