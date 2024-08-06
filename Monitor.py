@@ -2,6 +2,7 @@ from sys import platform
 from datetime import datetime
 from os import getcwd, linesep
 from os.path import join, exists
+from re import findall
 
 from pyshark import LiveCapture
 from pyshark.packet.packet import Packet
@@ -189,20 +190,23 @@ class Monitor:
 			raise ValueError("That ip address field does not contain an IPv4 address")
 
 		for ip_addr in self.__search_for[ip_set]:
-			if ip_addr != addr:
-				delim_idx: int = ip_addr.find("*")
-				end_search: int = ip_addr.find(".", delim_idx)
+			addresses: list[str] = ip_addr.split("*")
+			search_string = "["
 
-				if delim_idx == -1:
-					continue
-				
-				if end_search == -1:
-					if addr[:delim_idx] == ip_addr[:delim_idx]:
-						return True
-				else:
-					if((addr[:delim_idx] == ip_addr[:delim_idx]) and (addr[end_search:] == ip_addr[end_search:])):
-						return True
-	
+			ii = 0
+			while ii < addresses.count(""):
+				addresses.remove("")
+				ii += 1
+
+			for address in addresses:
+				search_string += r"\b" + address + r"\b|"
+
+			search_string = search_string[:-3]
+			search_string += "]"
+			print(findall(search_string, addr))
+			if len(findall(search_string, addr)) > 0:
+				return True
+			
 		return False
 
 	def parse_data(self) -> None:

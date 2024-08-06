@@ -7,7 +7,6 @@ from threading import Thread
 from time import sleep
 from datetime import datetime
 
-from Main import get_arguments
 from Monitor import Monitor
 
 slash = "\\" if platform == "win32" else "/"
@@ -15,13 +14,14 @@ path.append((path[0])[:path[0].rindex(slash)])
 
 interface = "wi-fi" if platform == "win32" else "wlan0"
 
-monitor = Monitor(interface, src_ip={"192.168.1.*", "169.*"}, dst_ip={"255.255.255.255"}, country={"us"})
+monitor = Monitor(interface, src_ip={"192.1*8.1.*", "169.*.*.*"}, dst_ip={"255.255.255.255"}, country={"us"})
 monitor.capture_packets()
 
 parse_thread = Thread(target=monitor.parse_data, daemon=False)
 parse_thread.start()
 
-while len(next(walk(getcwd()))[2]) < 4:
+NUM_OF_FILES = len(next(walk(getcwd()))[2])
+while len(next(walk(getcwd()))[2]) < NUM_OF_FILES:
 	pass
 
 try:
