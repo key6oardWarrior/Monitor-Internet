@@ -203,7 +203,7 @@ class Monitor:
 
 			search_string = search_string[:-3]
 			search_string += "]"
-			print(findall(search_string, addr))
+
 			if len(findall(search_string, addr)) > 0:
 				return True
 			
